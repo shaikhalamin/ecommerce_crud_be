@@ -1,0 +1,43 @@
+import { BaseEntity } from '@/common/entity/base.entity';
+import { User } from '@/user/entities/user.entity';
+import { Category } from 'src/category/entities/category.entity';
+import { Entity, Column, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Variant } from './variant.entity';
+
+@Entity('products')
+export class Product extends BaseEntity {
+  @Column({ nullable: false })
+  name: string;
+
+  @Column({ nullable: true })
+  slug: string;
+
+  @Column({
+    nullable: true,
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0,
+  })
+  price: number;
+
+  @Column({ nullable: true, type: 'text' })
+  description: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 30, default: 'active' })
+  status: string;
+
+  @Column({ nullable: true, default: 0 })
+  quantity: number;
+
+  @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn()
+  category: Category;
+
+  @OneToMany(() => Variant, (variant) => variant.product)
+  variant: Variant[];
+
+  @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn()
+  user: User;
+}

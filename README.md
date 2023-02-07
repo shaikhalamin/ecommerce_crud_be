@@ -3,6 +3,11 @@
 ## Installation
 
 ```bash
+
+$ git clone https://github.com/shaikhalamin/ecommerce_crud_be.git
+
+$ cp .env.example .env
+
 $ npm install
 ```
 
@@ -10,13 +15,8 @@ $ npm install
 
 ```bash
 # development
-$ npm run start
+$ npm run dev
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
 ## Migration Run Command

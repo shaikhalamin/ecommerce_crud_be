@@ -28,7 +28,6 @@ async function bootstrap() {
     .setTitle('E-Commerce App Backend')
     .setDescription('E-Commerce App Backend API description')
     .setVersion('1.0')
-    .addTag('ecommerce_backend')
     .addBearerAuth()
     .build();
 

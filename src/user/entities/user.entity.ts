@@ -1,6 +1,7 @@
-import { BeforeInsert, Column, Entity, Index } from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, OneToMany } from 'typeorm';
 import { BaseEntity } from '@/common/entity/base.entity';
 import * as bcrypt from 'bcrypt';
+import { Product } from 'src/product/entities/product.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -25,6 +26,9 @@ export class User extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => Product, (product) => product.user)
+  products: Product[];
 
   @BeforeInsert()
   async hashPassword() {
