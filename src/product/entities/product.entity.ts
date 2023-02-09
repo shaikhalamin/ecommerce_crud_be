@@ -38,12 +38,18 @@ export class Product extends BaseEntity {
   @Column({ nullable: true, default: 0 })
   quantity: number;
 
+  @Column({ nullable: true, type: 'varchar' })
+  collection: string;
+
+  @Column({ nullable: true, type: 'varchar' })
+  videoUrlLink: string;
+
   @ManyToOne(() => Category, (category) => category.products)
   @JoinColumn()
   category: Category;
 
-  @OneToMany(() => Variant, (variant) => variant.product)
-  variant: Variant[];
+  @OneToMany(() => Variant, (variants) => variants.product)
+  variants: Variant[];
 
   @OneToOne(() => StorageFile, (storageFile) => storageFile.product, {
     cascade: true,

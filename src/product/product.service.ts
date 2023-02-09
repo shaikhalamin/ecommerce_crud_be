@@ -3,6 +3,7 @@ import { StorageFileService } from '@/storage-file/storage-file.service';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -45,7 +46,7 @@ export class ProductService {
         const newProductVariant = await this.variantService.create(variant);
         variantsToSave.push(newProductVariant);
       }
-      product.variant = variantsToSave;
+      product.variants = variantsToSave;
     }
 
     return await this.productRepository.save(product);
@@ -70,7 +71,7 @@ export class ProductService {
             id: true,
             name: true,
           },
-          variant: {
+          variants: {
             id: true,
             name: true,
             variantSizes: {
@@ -86,7 +87,7 @@ export class ProductService {
             image_url: true,
           },
         },
-        relations: ['category', 'variant.variantSizes.size', 'productImage'],
+        relations: ['category', 'variants.variantSizes.size', 'productImage'],
         // where: {
         //   ...queryFilters,
         // },
@@ -111,10 +112,18 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    return await this.productRepository.findOne({
-      relations: ['category', 'variant.variantSizes.size', 'productImage'],
-      where: { id: id },
-    });
+    try {
+      const product = await this.productRepository.findOne({
+        relations: ['category', 'variants.variantSizes.size', 'productImage'],
+        where: { id: id },
+      });
+      if (!product) {
+        throw new NotFoundException('Product with id not found !');
+      }
+      return product;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
@@ -145,7 +154,7 @@ export class ProductService {
           const newProductVariant = await this.variantService.create(variant);
           variantsToSave.push(newProductVariant);
         }
-        product.variant = variantsToSave;
+        product.variants = variantsToSave;
       }
 
       return this.productRepository.save(product);
@@ -153,8 +162,11 @@ export class ProductService {
       throw new BadRequestException(error.message);
     }
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    try {
+      return await this.productRepository.remove(await this.findOne(id));
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

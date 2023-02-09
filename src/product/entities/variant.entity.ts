@@ -8,7 +8,9 @@ export class Variant extends BaseEntity {
   @Column({ nullable: false })
   name: string;
 
-  @ManyToOne(() => Product, (product) => product.variant)
+  @ManyToOne(() => Product, (product) => product.variants, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   product: Product;
 

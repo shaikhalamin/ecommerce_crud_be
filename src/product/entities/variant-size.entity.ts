@@ -11,7 +11,9 @@ export class VariantSize extends BaseEntity {
   @Column()
   sizeId!: number;
 
-  @ManyToOne(() => Variant, (variant) => variant.variantSizes)
+  @ManyToOne(() => Variant, (variant) => variant.variantSizes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   variant: Variant;
 

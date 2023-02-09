@@ -34,6 +34,22 @@ export class CreateProductDto {
   description: string;
 
   @ApiProperty({
+    description: 'The description of the product',
+    example: 'Premium Collection',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  collection: string;
+
+  @ApiProperty({
+    description: 'The video link of the product',
+    example: 'http://videolink.com/videoes/v/45893478834384989',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  videoUrlLink: string;
+
+  @ApiProperty({
     description: 'Category of the product',
     example: 1,
   })

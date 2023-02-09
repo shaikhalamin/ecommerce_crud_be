@@ -12,14 +12,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { StorageFileService } from './storage-file.service';
-import { CreateStorageFileDto } from './dto/create-storage-file.dto';
 import { UpdateStorageFileDto } from './dto/update-storage-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Express, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import * as fs from 'fs';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Storage File')
