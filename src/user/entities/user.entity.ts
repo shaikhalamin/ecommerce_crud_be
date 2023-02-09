@@ -5,10 +5,10 @@ import { Product } from 'src/product/entities/product.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   lastName: string;
 
   @Column({ nullable: false })
@@ -26,6 +26,9 @@ export class User extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ default: 'admin' })
+  role: string;
 
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];

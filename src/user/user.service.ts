@@ -29,7 +29,18 @@ export class UserService {
 
   async findAll() {
     try {
-      return await this.userRepository.find({});
+      return await this.userRepository.find({
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          phone: true,
+          designation: true,
+          isActive: true,
+          role: true,
+        },
+      });
     } catch (error) {
       throw new BadRequestException(error.message);
     }

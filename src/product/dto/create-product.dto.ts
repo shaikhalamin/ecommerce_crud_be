@@ -41,6 +41,13 @@ export class CreateProductDto {
   categoryId: number;
 
   @ApiProperty({
+    description: 'Image of the product',
+    example: 1,
+  })
+  @IsNotEmpty()
+  storageFileId: number;
+
+  @ApiProperty({
     description: 'Variants of the product',
     isArray: true,
     type: ProductVariantDto,

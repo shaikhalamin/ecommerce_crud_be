@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
+import { CreateSizeDto } from './dto/create-size.dto';
+import { UpdateSizeDto } from './dto/update-size.dto';
 import { Size } from './entities/size.entity';
 
 @Injectable()
@@ -10,23 +12,21 @@ export class SizeService {
     private readonly sizeRepository: Repository<Size>,
   ) {}
 
-  async create() {
-    // console.log(productVariantDto);
-    // const { sizes = [], ...variantFields } = productVariantDto;
-    // const variant = this.variantRepository.create(variantFields);
-    // //  sizes.length > 0 &&
-    // //       (variant.variantSizes = await this.storageFileService.findByIds(
-    // //         propertyImages,
-    // //       ));
-    // return 'This action adds a new product';
+  async create(createSizeDto: CreateSizeDto) {
+    try {
+      const size = this.sizeRepository.create(createSizeDto);
+      return await this.sizeRepository.save(size);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all product`;
+  findAll(query: any) {
+    return this.sizeRepository.find({});
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} product`;
+    return this.sizeRepository.findOneBy({ id });
   }
 
   async findByIds(ids: number[]) {
@@ -39,9 +39,9 @@ export class SizeService {
     }
   }
 
-  // update(id: number, updateProductDto: UpdateProductDto) {
-  //   return `This action updates a #${id} product`;
-  // }
+  update(id: number, updateSizeDto: UpdateSizeDto) {
+    return `This action updates a #${id} product`;
+  }
 
   remove(id: number) {
     return `This action removes a #${id} product`;

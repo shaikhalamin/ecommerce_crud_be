@@ -1,7 +1,15 @@
 import { BaseEntity } from '@/common/entity/base.entity';
+import { StorageFile } from '@/storage-file/entities/storage-file.entity';
 import { User } from '@/user/entities/user.entity';
 import { Category } from 'src/category/entities/category.entity';
-import { Entity, Column, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { Variant } from './variant.entity';
 
 @Entity('products')
@@ -36,6 +44,11 @@ export class Product extends BaseEntity {
 
   @OneToMany(() => Variant, (variant) => variant.product)
   variant: Variant[];
+
+  @OneToOne(() => StorageFile, (storageFile) => storageFile.product, {
+    cascade: true,
+  })
+  productImage: StorageFile;
 
   @ManyToOne(() => User, (user) => user.products)
   @JoinColumn()
