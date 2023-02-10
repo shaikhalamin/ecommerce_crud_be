@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  OnApplicationBootstrap,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,11 +11,15 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 
 @Injectable()
-export class CategoryService {
+export class CategoryService implements OnApplicationBootstrap {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
   ) {}
+
+  async onApplicationBootstrap() {
+    await this.insertCategories();
+  }
 
   async create(createCategoryDto: CreateCategoryDto) {
     try {
@@ -55,5 +60,18 @@ export class CategoryService {
 
   remove(id: number) {
     return `This action removes a #${id} category`;
+  }
+
+  async insertCategories() {
+    const categories = [
+      { name: 'Men Full-Shirt' },
+      { name: 'Women Pajamas' },
+      { name: 'Baby Dress' },
+    ];
+
+    for await (const category of categories) {
+      const categoryEntry = this.categoryRepository.create(category);
+      this.categoryRepository.save(categoryEntry);
+    }
   }
 }
